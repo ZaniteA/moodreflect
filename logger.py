@@ -12,5 +12,5 @@ class Logger(object):
         open(configs.LOG_FILE_NAME, 'w')
         
 
-    def log(msg):
+    def log(self, msg):
         logging.error(msg, exc_info=True)
