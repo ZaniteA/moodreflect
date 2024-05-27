@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QPushButton, QLab
 from PyQt6.QtCore import QTimer
 
 import configs
+from logger import Logger
 
 
 
@@ -124,8 +125,6 @@ class NewMoodPage(QWidget):
             audio_file_path = os.path.join(configs.DATA_DIR,
                                            'recording_{}.wav'.format(timestamp))
             data = np.concatenate(self.recorded_data)
-            for t in data:
-                logging.error(t)
             wavfile.write(audio_file_path, self.sample_rate, data)
 
         self.parent.mood_manager.append_mood(timestamp=timestamp,
