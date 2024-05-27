@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt, QUrl
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 
 import configs
+from components import PlayButton
 
 
 
@@ -18,16 +19,27 @@ class HomePage(QWidget):
 
     
     def init_ui(self):
+        self.setStyleSheet('background-color: #1E1E1E;')
+
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
         self.greeting_label = QLabel(self.get_greeting())
         self.greeting_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.greeting_label.setFont(self.parent.getSizedFont(30))
+        self.greeting_label.setFont(self.parent.getSizedFont(configs.H1_FONT_SIZE))
         self.layout.addWidget(self.greeting_label)
 
         self.records_area = QScrollArea()
         self.records_area.setWidgetResizable(True)
+        self.records_area.setStyleSheet('''
+            QScrollBar:vertical {
+                background-color: black;
+            }
+            
+            QScrollBar::handle:vertical {
+                background-color: #777;
+            }
+        ''')
         self.layout.addWidget(self.records_area)
         self.refresh_records()
 
@@ -74,7 +86,8 @@ class HomePage(QWidget):
 
 
     def display_records(self):
-        records = self.parent.mood_manager.read_history()
+        records = reversed(self.parent.mood_manager.read_history())
+
         self.audio_players = []
         self.audio_outputs = []
         self.play_buttons = []
@@ -85,22 +98,28 @@ class HomePage(QWidget):
         self.records_layout.addStretch()
 
 
+    def parseTimestamp(self, timestamp):
+        return datetime.datetime.strptime(timestamp, '%Y%m%d_%H%M%S').strftime('%d %b %Y %H:%M')
+
+
     def create_record_card(self, record):
         card = QFrame()
         card.setFrameShape(QFrame.Shape.Box)
-        card.setStyleSheet("background-color: white; color: black;")
+        card.setStyleSheet("background-color: #333; color: white;")
         card_layout = QVBoxLayout()
         card.setLayout(card_layout)
 
-        mood_label = QLabel(record['mood'])
-        mood_label.setFont(self.parent.getSizedFont(configs.BODY_FONT_SIZE))
+        mood_label = QLabel('<b>{}</b>'.format(record['mood']))
+        mood_label.setFont(self.parent.getSizedFont(configs.H3_FONT_SIZE))
         card_layout.addWidget(mood_label)
 
-        timestamp_label = QLabel(record['timestamp'])
+        timestamp_label = QLabel(self.parseTimestamp(record['timestamp']))
+        timestamp_label.setFont(self.parent.getSizedFont(configs.H4_FONT_SIZE))
         card_layout.addWidget(timestamp_label)
 
         if record['notes']:
             notes_label = QLabel(record['notes'])
+            notes_label.setFont(self.parent.getSizedFont(configs.BODY_FONT_SIZE))
             card_layout.addWidget(notes_label)
 
         if record['audio']:
@@ -111,8 +130,8 @@ class HomePage(QWidget):
             self.audio_outputs[-1].setVolume(50)
             # self.audio_players[-1].play()
 
-            self.play_buttons.append(QPushButton("Play"))
+            self.play_buttons.append(PlayButton(self))
             self.play_buttons[-1].clicked.connect(self.audio_players[-1].play)
-            card_layout.addWidget(self.play_buttons[-1])
+            card_layout.addWidget(self.play_buttons[-1], 0, Qt.AlignmentFlag.AlignRight)
 
         return card

@@ -8,7 +8,6 @@ from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QPushButton, QLab
 from PyQt6.QtCore import QTimer
 
 import configs
-from logger import Logger
 
 
 
