@@ -120,6 +120,7 @@ class HomePage(QWidget):
         if record['notes']:
             notes_label = QLabel(record['notes'])
             notes_label.setFont(self.parent.getSizedFont(configs.BODY_FONT_SIZE))
+            notes_label.setWordWrap(True)
             card_layout.addWidget(notes_label)
 
         if record['audio']:
