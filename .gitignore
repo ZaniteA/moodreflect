@@ -163,5 +163,11 @@ cython_debug/
 # Old source code files
 sandbox/
 
+# Data generator for preview
+data_generator/
+
 # Logs
 *.log
+
+# PowerPoint files
+*.pptx
