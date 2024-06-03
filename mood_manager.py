@@ -46,7 +46,7 @@ class MoodManager(object):
             try:
                 fresh_data = {'history': []}
                 with open(self.data_file, 'w') as dtf:
-                    json.dump(fresh_data, dtf)
+                    json.dump(fresh_data, dtf, indent=4)
             except Exception:
                 self.parent.logger.log('Error opening data file:')
 
@@ -71,7 +71,7 @@ class MoodManager(object):
         # data = self.ensure_sorted(data)
         try:
             with open(self.data_file, 'w') as dtf:
-                json.dump(data, dtf)
+                json.dump(data, dtf, indent=4)
         except Exception:
             self.parent.logger.log('Error opening data file:')
             return

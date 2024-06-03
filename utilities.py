@@ -1,11 +1,11 @@
 def clear_item(item):
-    if hasattr(item, "layout"):
+    if hasattr(item, 'layout'):
         if callable(item.layout):
             layout = item.layout()
     else:
         layout = None
 
-    if hasattr(item, "widget"):
+    if hasattr(item, 'widget'):
         if callable(item.widget):
             widget = item.widget()
     else:

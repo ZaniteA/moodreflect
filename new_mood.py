@@ -22,7 +22,7 @@ class NewMoodPage(QWidget):
         self.init_ui()
 
         self.is_recording = False
-        self.sample_rate = 44100  # Sample rate
+        self.sample_rate = 22050  # Sample rate
         self.recorded_data = []
 
 
@@ -117,24 +117,30 @@ class NewMoodPage(QWidget):
         self.recorded_data.clear()
         self.record_button.setText('Stop Recording')
         self.set_recording_status('Recording...')
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.record_audio)
-        self.timer.start(configs.TIME_CHUNK_MS)
+        
+        self.stream = sd.InputStream(callback=self.audio_callback, channels=2, samplerate=self.sample_rate)
+        self.stream.start()
 
 
-    def record_audio(self):
-        data = sd.rec(int(configs.TIME_CHUNK_S * self.sample_rate),
-                      samplerate = self.sample_rate,
-                      channels = 1,
-                      blocking = True)
-        self.recorded_data.append(data)
+    def audio_callback(self, indata, frames, time, status):
+        self.recorded_data.append(indata.copy())
 
 
     def stop_recording(self):
         self.is_recording = False
         self.record_button.setText('Start Recording')
         self.set_recording_status('Finished recording')
-        self.timer.stop()
+        self.stream.stop()
+
+
+    def save_recording(self,
+                       filename: str = os.path.join(configs.DATA_DIR, configs.TEMP_AUDIO_FILE)) -> bool:
+        if not self.recorded_data:
+            return False
+        
+        data = np.concatenate(self.recorded_data)
+        wavfile.write(filename, self.sample_rate, data)
+        return True
 
 
     def clear_results(self):
@@ -162,15 +168,21 @@ class NewMoodPage(QWidget):
             still_recording_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.result_layout.addWidget(still_recording_label)
             return
+        
+        # Save audio to temporary file
+        audio_file_path = (os.path.join(configs.DATA_DIR, configs.TEMP_AUDIO_FILE)
+                           if self.save_recording() else '')
+        text = self.notes_text_edit.toPlainText()
 
-        # Pick a random mood
-        self.current_mood = random.choice(configs.MOODS)
+        # Predict mood and erase the temporary file
+        self.current_mood = self.parent.ai_model.predict(text, audio_file_path)
+        os.remove(os.path.join(configs.DATA_DIR, configs.TEMP_AUDIO_FILE))
+
         mood_label = QLabel('Your mood is: <b>{}</b>'.format(self.current_mood))
         mood_label.setFont(self.parent.body_font(configs.BODY_FONT_SIZE))
         mood_label.setStyleSheet('color: black;')
         mood_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.result_layout.addWidget(mood_label)
-        self.result_layout.addSpacing(10)
 
         # Add save button
         self.save_layout = QHBoxLayout()
@@ -179,26 +191,22 @@ class NewMoodPage(QWidget):
         self.save_button = TextButton('Save')
         self.save_button.setFixedWidth(180)
         self.save_button.setFont(self.parent.body_font(configs.BODY_FONT_SIZE))
-        self.save_button.clicked.connect(self.save_recording)
+        self.save_button.clicked.connect(self.save_mood)
 
         self.save_layout.addWidget(self.save_button)
         self.save_layout.addStretch()
         self.result_layout.addLayout(self.save_layout)
 
 
-    def save_recording(self):
+    def save_mood(self):
         if not self.recorded_data and not self.notes_text_edit.toPlainText():
             self.set_recording_status('There is no data to save!')
             return
 
         timestamp = datetime.datetime.now().strftime(configs.FILE_TIME_FORMAT)
+        filename = os.path.join(configs.DATA_DIR, f'recording_{timestamp}.wav')
         
-        audio_file_path = ''
-        if self.recorded_data:
-            audio_file_path = os.path.join(configs.DATA_DIR,
-                                           f'recording_{timestamp}.wav')
-            data = np.concatenate(self.recorded_data)
-            wavfile.write(audio_file_path, self.sample_rate, data)
+        audio_file_path = filename if self.save_recording(filename) else ''
 
         self.parent.mood_manager.append_mood(Mood(timestamp=timestamp,
                                                   audio=audio_file_path,

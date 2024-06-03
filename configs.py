@@ -4,9 +4,10 @@ from PyQt6.QtGui import QColor
 
 
 # File names
-LOG_FILE_NAME  = 'moodreflect.log'
-DATA_DIR       = os.path.join('assets', 'data')
-DATA_FILE_NAME = 'history.dat'
+LOG_FILE_NAME   = 'moodreflect.log'
+DATA_DIR        = os.path.join('assets', 'data')
+DATA_FILE_NAME  = 'history.dat'
+TEMP_AUDIO_FILE = 'tmp.wav'
 
 
 # Recording
@@ -59,11 +60,10 @@ APP_AUTHORS    = [
 
 
 # Moods
-MOODS          = ["Neutral", "Calm", "Happy", "Sad", "Angry", "Fear", "Disgust", "Surprise"]
+MOODS          = ["Neutral", "Happy", "Sad", "Angry", "Fear", "Disgust", "Surprise"]
 ENCOURAGEMENTS = {
     'Empty'   : "You haven't tracked your moods yet that month!",
     'Neutral' : "How about we explore some interesting options today?",
-    'Calm'    : "Breathe deeply, you've got this.",
     'Happy'   : "Let's keep this positive energy flowing!",
     'Sad'     : "It's okay to feel this way. Take your time and you'll feel better soon.",
     'Angry'   : "Take a step back and express yourself calmly when you're ready.",
@@ -73,11 +73,25 @@ ENCOURAGEMENTS = {
 }
 MOOD_COLORS    = {
     'Neutral' : [QColor(228, 228, 228), QColor(144, 149, 158), QColor(104, 109, 118)],
-    'Calm'    : [QColor(217, 237, 255), QColor(137, 213, 255), QColor( 90, 178, 255)],
     'Happy'   : [QColor(251, 245, 207), QColor(255, 217,  55), QColor(242, 179,   0)],
     'Sad'     : [QColor(207, 229, 231), QColor( 19, 106, 149), QColor(  0,  54,  94)],
     'Angry'   : [QColor(255, 222, 197), QColor(250, 122, 122), QColor(252,  65,   0)],
     'Fear'    : [QColor(215, 245, 217), QColor(106, 188, 104), QColor( 90, 136, 100)],
     'Disgust' : [QColor(254, 229, 178), QColor(166, 123,  91), QColor(111,  78,  55)],
     'Surprise': [QColor(250, 205, 255), QColor(182, 114, 200), QColor(134,  70, 156)],
+}
+
+
+
+# AI
+TEXT_WEIGHT   = 1
+SPEECH_WEIGHT = 5
+RESULT_TO_LABEL = {
+    0 : 'Angry',
+    1 : 'Disgust',
+    2 : 'Fear',
+    3 : 'Happy',
+    4 : 'Neutral',
+    5 : 'Sad',
+    6 : 'Suprise'
 }

@@ -7,6 +7,7 @@ from components import DropShadow
 import configs
 from logger import Logger
 from mood_manager import MoodManager
+from models import AIModelManager
 from home import HomePage
 from new_mood import NewMoodPage
 from stats import StatisticsPage
@@ -19,6 +20,7 @@ class MoodReflectApp(QMainWindow):
         super().__init__()
         self.logger = Logger()
         self.mood_manager = MoodManager(self)
+        self.ai_model = AIModelManager()
         self.init_ui()
 
 
