@@ -160,14 +160,8 @@ cython_debug/
 #.idea/
 
 
-# Old source code files
-sandbox/
-
-# Data generator for preview
-data_generator/
+# Local files
+local_files/
 
 # Logs
 *.log
-
-# PowerPoint files
-*.pptx
