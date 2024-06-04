@@ -165,3 +165,6 @@ local_files/
 
 # Logs
 *.log
+
+# Zip files for releases
+*.zip
