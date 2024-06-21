@@ -168,3 +168,6 @@ local_files/
 
 # Zip files for releases
 *.zip
+
+# Virtual environment
+MoodReflectEnv/

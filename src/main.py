@@ -16,7 +16,7 @@ except ImportError:
 
 def main():
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon(utilities.adjust_path('assets/logo/moodreflect_icon.png')))
+    app.setWindowIcon(QIcon(utilities.adjust_path('assets/logo/moodreflect_icon.ico')))
     window = MoodReflectApp()
     window.show()
 
