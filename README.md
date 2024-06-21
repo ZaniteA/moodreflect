@@ -3,10 +3,10 @@
 A mood tracker app made as a Software Engineering project in BINUS University.
 
 **LE01 Group 7**
-- 2602069596 • Jack Julius Ryadi Lie
-- 2602078726 • Albert Yulius Ramahalim
-- 2602081462 • Christopher Alexander Chandra
-- 2602082944 • Christoffer Edbert Karuniawan
+- 2602069596 • Jack Julius Ryadi Lie ([jackyy](https://github.com/jackyy))
+- 2602078726 • Albert Yulius Ramahalim ([ZaniteA](https://github.com/ZaniteA))
+- 2602081462 • Christopher Alexander Chandra ([Alexander-ppq](https://github.com/Alexander-ppq))
+- 2602082944 • Christoffer Edbert Karuniawan ([Chrisedyong](https://github.com/Chrisedyong))
 
 
 ## About
