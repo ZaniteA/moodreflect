@@ -13,4 +13,4 @@ A mood tracker app made as a Software Engineering project in BINUS University.
 
 MoodReflect is an AI-integrated mood tracker app with the ability to detect users' moods through speech and text. This app was developed using [PyQt6](https://pypi.org/project/PyQt6/).
 
-Currently, only Windows is supported. The release and installation instructions can be found [here](https://github.com/ZaniteA/moodreflect/releases/tag/v1).
+Currently, only Windows is supported. The release and installation instructions can be found [here](https://github.com/ZaniteA/moodreflect/releases/tag/v1.1).
